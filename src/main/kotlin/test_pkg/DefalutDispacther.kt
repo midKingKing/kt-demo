@@ -1,6 +1,7 @@
 package test_pkg
 
 import java.util.concurrent.Executors
+import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.atomic.AtomicInteger
 
 object Dispatchers {
@@ -20,5 +21,15 @@ object Dispatchers {
                 threadPool.submit(block)
             }
         })
+    }
+
+    val blockQueue: LinkedBlockingDeque<() -> Unit> = LinkedBlockingDeque()
+
+    val BlockingDispatcher by lazy {
+        object : Dispatcher {
+            override fun dispatch(block: () -> Unit) {
+                blockQueue.offer(block)
+            }
+        }
     }
 }

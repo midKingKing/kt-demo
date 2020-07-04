@@ -14,9 +14,11 @@ abstract class AbstractCoroutine<T>(override val context: CoroutineContext) : Jo
         state.set(CoroutineState.InComplete())
     }
 
-    override val isActive: Boolean = state.get() is CoroutineState.InComplete
+    override val isActive: Boolean
+        get() = state.get() is CoroutineState.InComplete
 
-    override val isCompleted: Boolean = state.get() is CoroutineState.Complete<*>
+    override val isCompleted: Boolean
+        get() = state.get() is CoroutineState.Complete<*>
 
     override fun invokeOnCompletion(onComplete: OnComplete): Disposable {
         return doOnCompleted {
