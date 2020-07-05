@@ -54,7 +54,7 @@ abstract class AbstractCoroutine<T>(override val context: CoroutineContext) : Jo
         }
     }
 
-    private fun doOnCompleted(block: (Result<T>) -> Unit): Disposable {
+    protected fun doOnCompleted(block: (Result<T>) -> Unit): Disposable {
         val disposable = CompletionHandlerDisposable(this, block)
         val newState = state.updateAndGet { prev ->
             when (prev) {

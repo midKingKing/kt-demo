@@ -27,10 +27,28 @@ fun log(vararg msg: Any?) = println("${now()} [${Thread.currentThread().name}] $
 //    job.join()
 //}
 
-suspend fun main() = runBlocking {
+//suspend fun main() = runBlocking {
+//    log(1)
+//    delay(5, TimeUnit.SECONDS)
+//    log(2)
+//}
+
+suspend fun main() {
     log(1)
-    delay(5, TimeUnit.SECONDS)
-    log(2)
+    val deferred = async {
+        log(2)
+        delay(3, TimeUnit.SECONDS)
+        log(3)
+        "Hello"
+        throw ArithmeticException("Div 0")
+    }
+    log(4)
+    try {
+        val result = deferred.await()
+        log(5, result)
+    } catch (e: Exception) {
+        log(6, e)
+    }
 }
 
 suspend fun hello() = suspendCoroutine<Int> {
