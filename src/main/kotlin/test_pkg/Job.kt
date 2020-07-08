@@ -3,6 +3,8 @@ package test_pkg
 import kotlin.coroutines.CoroutineContext
 
 typealias OnComplete = () -> Unit
+typealias OnCancel = () -> Unit
+typealias CancellationException = java.util.concurrent.CancellationException
 
 interface Job : CoroutineContext.Element {
     companion object Key : CoroutineContext.Key<Job>
@@ -15,7 +17,11 @@ interface Job : CoroutineContext.Element {
 
     fun invokeOnCompletion(onComplete: OnComplete): Disposable
 
+    fun invokeOnCancel(onCancel: OnCancel): Disposable
+
     fun remove(disposable: Disposable)
 
     suspend fun join()
+
+    fun cancel()
 }

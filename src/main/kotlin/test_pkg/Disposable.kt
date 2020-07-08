@@ -12,6 +12,12 @@ class CompletionHandlerDisposable<T>(val job: Job, val onComplete: OnCompleteT<T
     }
 }
 
+class CancellationHandlerDisposable(val job: Job, val onCancel: OnCancel) : Disposable {
+    override fun dispose() {
+        job.remove(this)
+    }
+}
+
 sealed class DisposableList {
     object Nil: DisposableList()
     class Cons(val head: Disposable, val tail: DisposableList): DisposableList()
