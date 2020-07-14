@@ -101,8 +101,20 @@ abstract class AbstractCoroutine<T>(context: CoroutineContext) : Job, Continuati
             }
         }
 
-        (newState as CoroutineState.Complete<T>).notifyCompletion(result)
+        (newState as CoroutineState.Complete<T>).exception?.let(::tryHandlerException)
+        newState.notifyCompletion(result)
         newState.clear()
+    }
+
+    private fun tryHandlerException(e: Throwable) {
+        when(e) {
+            is CancellationException -> Unit
+            else -> handlerException(e)
+        }
+    }
+
+    protected open fun handlerException(e: Throwable) {
+
     }
 
     override fun invokeOnCancel(onCancel: OnCancel): Disposable {
@@ -139,5 +151,9 @@ abstract class AbstractCoroutine<T>(context: CoroutineContext) : Job, Continuati
         if (newState is CoroutineState.Cancelling) {
             newState.notifyCancellation()
         }
+    }
+
+    override fun toString(): String {
+        return "${context[CoroutineName]?.name}"
     }
 }

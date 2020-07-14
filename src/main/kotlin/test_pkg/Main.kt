@@ -1,5 +1,6 @@
 package test_pkg
 
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -16,11 +17,17 @@ val now = {
 fun log(vararg msg: Any?) = println("${now()} [${Thread.currentThread().name}] ${msg.joinToString(" ")}")
 
 suspend fun main() {
-    val job = launch(Dispatchers.Default) {
+    val exceptionHandler = ExceptionHandler { coroutineContext, throwable ->
+        log(coroutineContext[Job], throwable)
+    }
+    val job = launch(Dispatchers.Default + exceptionHandler) {
         log(1)
+        throw IllegalArgumentException("error arg")
+
         val result = hello()
         log(2, result)
         delay(1, TimeUnit.SECONDS)
+
         log(3)
     }
 
