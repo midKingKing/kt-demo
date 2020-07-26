@@ -37,13 +37,13 @@ suspend fun main() {
     job.join()
 }
 
-//suspend fun main() = runBlocking {
+//suspend fun corotinue.main() = runBlocking {
 //    log(1)
 //    delay(5, TimeUnit.SECONDS)
 //    log(2)
 //}
 
-//suspend fun main() {
+//suspend fun corotinue.main() {
 //    log(1)
 //    val deferred = async {
 //        log(2)

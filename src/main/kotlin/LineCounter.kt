@@ -15,7 +15,7 @@
 //    }
 //}
 //
-//suspend fun main() {
+//suspend fun corotinue.main() {
 //    val result = lineCounter(File("."))
 //    log(result)
 //}
